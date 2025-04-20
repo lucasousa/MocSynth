@@ -1,33 +1,21 @@
-import json
-from src.gerador import Gerador
-from datetime import datetime as dt, timedelta as td
+from src.simulator import generate_synthetic_data
+from src.utils import save_to_json
 
+if __name__ == "__main__":
+    providers_config = [
+        {"name": "AWS", "services": ["EC2", "S3", "Lambda"]},
+        {"name": "Azure", "services": ["VM", "BlobStorage", "Functions"]},
+        {
+            "name": "GCP",
+            "services": ["ComputeEngine", "CloudStorage", "CloudFunctions"],
+        },
+    ]
 
-# Abertura do arquivo contendo os provedores e microsserviços
-with open("resultDataEdit.json", "r", encoding="utf-8") as data_file:
-    app = json.load(data_file)
-
-# Criação de datas
-hoje = dt.now()
-tresMeses = hoje + td(days=15)
-
-# Criação do objeto Gerador
-gerador = Gerador(
-    result=app[0],
-    date_initial=hoje,
-    date_final=tresMeses,
-    intervalo=10,
-    case=4,
-    # ms_selecionados=[0,3]
-    requisitos_selecionados=[2,3]
-)
-
-# Geração de dados
-gerador.iniciar()
-
-# Casos:
-#       Caso 1: Melhor caso taxa de disponibilidade, custo e tempo de resposta estão sendo atendidas por absolutamente todos os fornecedores
-#       Caso 2: Caso oposto ao 1.
-#       Caso 3: Gerados aleatóriamente.
-#       Caso 4: Selecionar 1 ou mais requisitos (disponibilidade, custo e tempo de resposta) que não serão atendidos
-#       Caso 5: Selecionar 1 ou mais microsseviços que não serão atendidos
+    dataset = generate_synthetic_data(
+        days=2,
+        interval_minutes=60,
+        proportions=[40, 30, 20, 10],
+        providers=providers_config,
+    )
+    print(f"Generated {len(dataset)} data points.")
+    save_to_json(dataset, filename="synthetic_data.json")
