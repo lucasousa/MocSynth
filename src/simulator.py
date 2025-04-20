@@ -4,10 +4,9 @@ from datetime import datetime, timedelta
 import src.scenarios as base
 
 SCENARIO_FUNCS = [
-    base.scenario_normal,
-    base.scenario_high_load,
-    base.scenario_low_availability,
-    base.scenario_failure,
+    base.scenario_operational,
+    base.scenario_unstable,
+    base.scenario_anomalous,
 ]
 
 

@@ -14,7 +14,7 @@ if __name__ == "__main__":
     dataset = generate_synthetic_data(
         days=2,
         interval_minutes=60,
-        proportions=[40, 30, 20, 10],
+        proportions=[60, 30, 10],
         providers=providers_config,
     )
     print(f"Generated {len(dataset)} data points.")
